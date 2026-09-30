@@ -1,0 +1,481 @@
+{
+  "info": {
+    "_postman_id": "dafd43c3-54da-4e9a-b6dc-b913c08f52b2",
+    "name": "Zelda API",
+    "description": "This collection covers functional testing of the **Zelda API**, focusing on the **Games** endpoint. It is organized into three test categories:\n\n- **Positive Testing** – Validates successful scenarios such as listing all games, retrieving a game by ID or name, verifying required fields, checking default and parameterized item counts, and ensuring correct pagination behavior.\n    \n- **Negative Testing** – Covers error-handling scenarios including non-existent IDs (with valid and invalid formats) and pagination behavior when no items are available.\n    \n- **Improvements** – Documents edge cases and potential API issues, such as negative pagination values, incorrect data types in query parameters, and unsupported HTTP methods.\n    \n\nThe collection uses the `{{baseURL}}` environment variable to manage the base URL and supports the `Zelda-API-Dev` environment for configuration.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "58609850",
+    "_collection_link": "https://go.postman.co/collection/58609850-dafd43c3-54da-4e9a-b6dc-b913c08f52b2?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Games",
+      "item": [
+        {
+          "name": "Positive Testing",
+          "item": [
+            {
+              "name": "CT01 - Get All games - Listar games com sucesso",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "let jsonData = pm.response.json();\n\npm.test(\"A resposta deve conter a propriedade 'success' como true\", function () {\n    pm.expect(jsonData.success).to.be.true;\n});\n\npm.test(\"A resposta deve conter a propriedade 'data' como array\", function () {\n    pm.expect(jsonData.data).to.be.an('array');\n});\n\npm.test(\"A resposta deve conter a propriedade 'count' como número\", function () {\n    pm.expect(jsonData.count).to.be.a('number');\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/games",
+                  "host": ["{{baseURL}}"],
+                  "path": ["games"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "CT02 - Get game by ID -  Retornar um game a partir do seu ID",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "let jsonData = pm.response.json();\n\nconst gameID = pm.environment.get(\"aLinkToThePastID\");\n\npm.test(`O game retornado corresponde ao ID estabelecido: ${gameID}`, function () {\n    pm.expect(gameID).to.equal(jsonData.data.id);\n});\n\npm.test(\"O nome do jogo é 'The Legend of Zelda: A Link to the Past'\", function () {\n    pm.expect(jsonData.data).to.have.property('name', 'The Legend of Zelda: A Link to the Past');\n});\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/games/:game_id",
+                  "host": ["{{baseURL}}"],
+                  "path": ["games", ":game_id"],
+                  "variable": [
+                    {
+                      "key": "game_id",
+                      "value": "5f6ce9d805615a85623ec2b8"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "CT03 - Validar os campos obrigatórios da lista de games",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "let jsonData = pm.response.json();\n\npm.test(\"Verifica se o campo 'data' contem as propriedades esperadas\", function () {\n    // Itera sobre cada item no array 'data' e verifica se as propriedades esperadas estão presentes\n    jsonData.data.forEach((item) => {\n        pm.expect(item).to.have.property(\"name\");\n        pm.expect(item).to.have.property(\"description\");\n        pm.expect(item).to.have.property(\"developer\");\n        pm.expect(item).to.have.property(\"publisher\");\n        pm.expect(item).to.have.property(\"released_date\");\n        pm.expect(item).to.have.property(\"id\");\n    });\n});\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/games",
+                  "host": ["{{baseURL}}"],
+                  "path": ["games"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "CT04 - Validar a quantidade padrão de itens retornados na lista",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "let jsonData = pm.response.json();\n\npm.test(\"O contador deve retornar o valor padrão: 20\", function () {\n    pm.expect(jsonData.count).to.equal(20);\n});\n\npm.test(\"A propriedade 'data' deve retornar uma lista com 20 objetos\", function () {\n    pm.expect(jsonData.data).to.be.an('array');\n    pm.expect(jsonData.data.length).to.equal(20);\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/games",
+                  "host": ["{{baseURL}}"],
+                  "path": ["games"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "CT05 - Validar a quantidade de itens retornados com parâmetro LIMIT",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "let jsonData = pm.response.json();\n\npm.test(\"O contador deve retornar o valor padrão: 20\", function () {\n    pm.expect(jsonData.count).to.equal(3);\n});\n\npm.test(\"A propriedade 'data' deve retornar uma lista com 20 objetos\", function () {\n    pm.expect(jsonData.data).to.be.an('array');\n    pm.expect(jsonData.data.length).to.equal(3);\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/games?limit=3",
+                  "host": ["{{baseURL}}"],
+                  "path": ["games"],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "3"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "CT06 - Validar se a paginação é retornada corretamente",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "let jsonData = pm.response.json();\n\npm.test(\"A resposta deve conter as propriedades success, count e data\", function () {\n    pm.expect(jsonData).to.have.property(\"success\");\n    pm.expect(jsonData).to.have.property(\"count\");\n    pm.expect(jsonData).to.have.property(\"data\");\n});\n\npm.test(\"A propriedade success deve ser true\", function () {\n    pm.expect(jsonData.success).to.be.true;\n});\n\npm.test(\"A paginação deve respeitar o parâmetro limit\", function () {\n    pm.expect(jsonData.data).to.be.an(\"array\");\n    pm.expect(jsonData.data.length).to.be.at.most(3);\n});\n\npm.test(\"O count deve refletir a quantidade de itens retornados\", function () {\n    pm.expect(jsonData.count).to.equal(jsonData.data.length);\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/games?limit=3&page=10",
+                  "host": ["{{baseURL}}"],
+                  "path": ["games"],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "3"
+                    },
+                    {
+                      "key": "page",
+                      "value": "10"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "CT07 - Validar que páginas diferentes retornam itens diferentes",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.sendRequest({\n    url: pm.environment.get(\"baseURL\") + \"/games?limit=3&page=10\",\n    method: \"GET\"\n}, function (err, response) {\n    if (!err) {\n        pm.collectionVariables.set(\"page10Data\", JSON.stringify(response.json()));\n    }\n});"
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "let page9Data = pm.response.json();\nlet page10Data = JSON.parse(pm.collectionVariables.get(\"page10Data\"));\n\npm.test(\"Páginas diferentes devem retornar itens diferentes\", function () {\n    let page9Ids = page9Data.data.map(item => item.id);\n    let page10Ids = page10Data.data.map(item => item.id);\n\n    let hasOverlap = page9Ids.some(id => page10Ids.includes(id));\n    pm.expect(hasOverlap).to.be.false;\n});\n\npm.test(\"Ambas as páginas devem retornar dados\", function () {\n    pm.expect(page9Data.data).to.be.an('array').that.is.not.empty;\n    pm.expect(page10Data.data).to.be.an('array').that.is.not.empty;\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/games?limit=3&page=9",
+                  "host": ["{{baseURL}}"],
+                  "path": ["games"],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "3"
+                    },
+                    {
+                      "key": "page",
+                      "value": "9"
+                    }
+                  ]
+                },
+                "description": "Generated from cURL: curl --location '{{baseURL}}/games?limit=3&page=9'"
+              },
+              "response": []
+            },
+            {
+              "name": "CT08 - Get game by NAME -  Retornar um game a partir de uma correspondência com seu nome",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "let jsonData = pm.response.json();\n\npm.test(\"A lista de games retornados é maior que 0\", function () {\n    pm.expect(jsonData.count).to.be.greaterThan(0);\n});\n\npm.test(\"Todos os jogos retornados contêm o termo pesquisado no nome\", function () {\n    pm.expect(jsonData.data).to.be.an('array');\n    jsonData.data.forEach(function(game) {\n        pm.expect(game.name).to.include(\"Link\");\n    });\n});\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/games/?name=Link",
+                  "host": ["{{baseURL}}"],
+                  "path": ["games", ""],
+                  "query": [
+                    {
+                      "key": "name",
+                      "value": "Link"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code é 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Negative Testing",
+          "item": [
+            {
+              "name": "CT01 - Validar ID inexistente com formato válido",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Valida se o status code retornado corresponde a um erro\", function () {\n    pm.expect(pm.response.code).to.be.oneOf([400, 404]);\n});\n\npm.test(\"Valida se o erro retornado é '404 Not Found', padrão REST\", function () {\n    pm.response.to.have.status(404);\n});\n\npm.test(\"Valida se 'success' é igual a false\", function () {\n    var jsonData = pm.response.json();\n    pm.expect(jsonData.success).to.be.false;\n});\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/games/:invalid-id",
+                  "host": ["{{baseURL}}"],
+                  "path": ["games", ":invalid-id"],
+                  "variable": [
+                    {
+                      "key": "invalid-id",
+                      "value": "600000000000000000000000"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "CT02 - Validar ID inexistente com formato inválido",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Valida se o status code retornado corresponde a um erro\", function () {\n    pm.expect(pm.response.code).to.be.oneOf([400, 404]);\n});\n\npm.test(\"Valida se o erro retornado é '400 Not Found', padrão REST\", function () {\n    pm.response.to.have.status(400);\n});\n\npm.test(\"Valida se 'success' é igual a false\", function () {\n    var jsonData = pm.response.json();\n    pm.expect(jsonData.success).to.be.false;\n});\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/games/:invalid-id",
+                  "host": ["{{baseURL}}"],
+                  "path": ["games", ":invalid-id"],
+                  "variable": [
+                    {
+                      "key": "invalid-id",
+                      "value": "1234"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "CT03 - Validar se a paginação é retornada corretamente quando não há items",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "let jsonData = pm.response.json();\n\npm.test(\"Status code é 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"A resposta deve conter as propriedades success, count e data\", function () {\n    pm.expect(jsonData).to.have.property(\"success\");\n    pm.expect(jsonData).to.have.property(\"count\");\n    pm.expect(jsonData).to.have.property(\"data\");\n});\n\npm.test(\"A propriedade success deve ser true\", function () {\n    pm.expect(jsonData.success).to.be.true;\n});\n\npm.test(\"A lista (data) deve estar vazia\", function () {\n    pm.expect(jsonData.data).to.be.an(\"array\");\n    pm.expect(jsonData.data).to.be.empty;\n});\n\npm.test(\"O 'count' deve refletir a quantidade de itens retornados: 0\", function () {\n    pm.expect(jsonData.count).to.equal(jsonData.data.length);\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/games?limit=3&page=100",
+                  "host": ["{{baseURL}}"],
+                  "path": ["games"],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "3"
+                    },
+                    {
+                      "key": "page",
+                      "value": "100"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Edge Cases",
+          "item": [
+            {
+              "name": "CT01 - Valor negativo em paginação não deveria retornar nada",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code deve ser '400 Bad Request'\", function () {\n    pm.response.to.have.status(400);\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/games?page=-10",
+                  "host": ["{{baseURL}}"],
+                  "path": ["games"],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "-10"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "CT02 - Validar tipo de dado incorreto em query param limit",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code deve ser '400 Bad Request'\", function () {\n    pm.response.to.have.status(400);\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/games?limit=abcd",
+                  "host": ["{{baseURL}}"],
+                  "path": ["games"],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "abcd"
+                    },
+                    {
+                      "key": "page",
+                      "value": "100",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "CT03 - Validar método HTTP não suportado",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Garante que métodos não permitidos são bloqueados (400, 405, 404 ou 403)\", function () {\n    // Valida que o servidor não aceitou a requisição como sucesso (2xx ou 3xx)\n    pm.expect(pm.response.code).to.be.oneOf([400, 405, 404, 403]);\n});\n\npm.test(\"Valida se o erro retornado é '405 Method Not Allowed', padrão REST\", function () {\n    pm.response.to.have.status(405);\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"data\": {\r\n        \"name\": \"test\",\r\n        \"description\": \"Test Test test\",\r\n        \"developer\": \"test\",\r\n        \"publisher\": \"test\",\r\n        \"released_date\": \" April 13, 1992\",\r\n        \"id\": \"5f6ce9d805615a85623ec2b8\"\r\n    }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseURL}}/games/{{aLinkToThePastID}}",
+                  "host": ["{{baseURL}}"],
+                  "path": ["games", "{{aLinkToThePastID}}"]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "page10Data",
+      "value": ""
+    }
+  ]
+}
