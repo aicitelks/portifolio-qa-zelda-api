@@ -56,7 +56,9 @@ A documentação técnica do projeto está organizada na pasta `docs/`:
 
 Os testes foram automatizados e executados via linha de comando com o **Newman** no ambiente **WSL2 (Ubuntu)**, gerando relatórios gráficos e interativos através do `newman-reporter-htmlextra`. 
 
-Para baixar e visualizar **o relatório completo** basta acessar [aqui](./evidencias/Zelda%20API-report.html).
+- Para visualizar **o relatório completo** basta acessar
+[aqui](https://htmlpreview.github.io/?https://github.com/aicitelks/portifolio-qa-zelda-api/blob/main/evidencias/Zelda%20API-report.html)
+
 <img width="1126" height="582" alt="Zelda API" src="https://github.com/user-attachments/assets/c39a0875-f383-48b7-b739-7198c0f1347a" />
 
 
