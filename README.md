@@ -15,7 +15,7 @@
 
 Este repositório faz parte do meu portfólio de Engenharia de Qualidade de Software (QA). O objetivo principal é demonstrar a aplicação de cenários de **Testes Funcionais**, **Testes de Contrato**, **Testes Negativos** e **Validação de Parâmetros**, além de relatar inconsistências de protocolo e regras de negócio.
 
-A API utilizada como objeto de estudo é a <a href="https://docs.zelda.fanapis.com/docs/" target="_blank">Zelda FanAPI ↗️</a>, com foco no recurso principal `/games`.
+A API utilizada como objeto de estudo é a <a href="https://docs.zelda.fanapis.com/docs/">Zelda FanAPI </a>, com foco no recurso principal `/games`.
 
 ---
 
@@ -46,9 +46,9 @@ A documentação técnica do projeto está organizada na pasta `docs/`:
 
 | Documento | Descrição | Link |
 | :--- | :--- | :--- |
-| 📋 **Plano de Teste** | Estratégia, escopo, ferramentas e gestão de riscos. | [Acessar](./docs/PLANO_DE_TESTE.md) |
-| 🧪 **Casos de Teste** | Mapeamento detalhado dos cenários e asserções. | [Acessar](./docs/CASOS_DE_TESTE.md) |
-| 🐛 **Relatório de Bugs** | Reporte de divergências de status code e validações. | [Acessar](./docs/BUG_REPORTS.md) |
+| 📋 **Plano de Teste** | Estratégia, escopo, ferramentas e gestão de riscos. | [Acessar](./docs/plano_de_teste.md) |
+| 🧪 **Casos de Teste** | Mapeamento detalhado dos cenários e asserções. | [Acessar](./docs/casos_de_teste.md) |
+| 🐛 **Relatório de Bugs** | Reporte de divergências de status code e validações. | [Acessar](./docs/relatorio_de_bugs_zelda_api.md) |
 
 ---
 
@@ -56,7 +56,8 @@ A documentação técnica do projeto está organizada na pasta `docs/`:
 
 Os testes foram automatizados e executados via linha de comando com o **Newman** no ambiente **WSL2 (Ubuntu)**, gerando relatórios gráficos e interativos através do `newman-reporter-htmlextra`. 
 
-Para baixar e visualizar **o relatório completo** basta acessar [aqui](.evidencias/Zelda%20API-report.html).
+- Para visualizar **o relatório completo** basta acessar [aqui](./evidencias/Zelda%20API-report.html) e baixar o arquivo.
+
 <img width="1126" height="582" alt="Zelda API" src="https://github.com/user-attachments/assets/c39a0875-f383-48b7-b739-7198c0f1347a" />
 
 
