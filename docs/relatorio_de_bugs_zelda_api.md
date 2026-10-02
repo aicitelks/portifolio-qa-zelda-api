@@ -7,8 +7,8 @@ Este documento reúne os achados de testes funcionais, exploratórios e de contr
 | ID          | Título                                                                               | Tipo                     | Gravidade | Status Esperado          | Status Atual      |
 | ----------- | ------------------------------------------------------------------------------------ | ------------------------ | --------- | ------------------------ | ----------------- |
 | **BUG-001** | Status Code 400 retornado para recursos inexistentes                                 | Divergência de Protocolo | Baixa     | `404 Not Found`          | `400 Bad Request` |
-| **BUG-002** | Métodos HTTP não permitidos retornam status semântico incorreto sem header `Allow`   | Divergência de Protocolo | Baixa     | `405 Method Not Allowed` | `400 Bad Request` |
-| **BUG-003** | Falta de validação para parâmetros de paginação negativos (`limit` / `page`)         | Validação de Entrada     | Média     | `400 Bad Request`        | `200 OK`          |
+| **BUG-002** | Métodos HTTP não permitidos retornam status semântico incorreto                      | Divergência de Protocolo | Baixa     | `405 Method Not Allowed` | `400 Bad Request` |
+| **BUG-003** | Falta de validação para parâmetros de paginação negativos (`page`)                   | Validação de Entrada     | Média     | `400 Bad Request`        | `200 OK`          |
 | **BUG-004** | Trata silenciosamente tipos de dados inválidos em parâmetros de query (`limit=abcd`) | Validação de Entrada     | Média     | `400 Bad Request`        | `200 OK`          |
 
 ## 🔍 Detalhamento dos issues
