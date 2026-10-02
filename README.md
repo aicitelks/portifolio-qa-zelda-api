@@ -23,20 +23,20 @@ A API utilizada como objeto de estudo é a <a href="https://docs.zelda.fanapis.c
 
 A coleção do Postman foi estruturada nas seguintes categorias:
 
-* 🟢 **Positive Testing:**
-  * Listagem geral de jogos com verificação de contrato e tipos de dados.
-  * Consulta por ID específico com asserção de propriedades obrigatórias (`name`, `developer`, `publisher`, etc.).
-  * Validação de filtros por nome e paginação (`limit` e `page`).
-  * Teste de paginação encadeada (garantindo que páginas distintas retornam registros diferentes sem sobreposição).
+- 🟢 **Positive Testing:**
+  - Listagem geral de jogos com verificação de contrato e tipos de dados.
+  - Consulta por ID específico com asserção de propriedades obrigatórias (`name`, `developer`, `publisher`, etc.).
+  - Validação de filtros por nome e paginação (`limit` e `page`).
+  - Teste de paginação encadeada (garantindo que páginas distintas retornam registros diferentes sem sobreposição).
 
-* 🔴 **Negative Testing:**
-  * Consulta com IDs inexistentes (formatos válidos e inválidos).
-  * Comportamento da API em páginas fora do limite da base de dados (retorno de listas vazias).
+- 🔴 **Negative Testing:**
+  - Consulta com IDs inexistentes (formatos válidos e inválidos).
+  - Comportamento da API em páginas fora do limite da base de dados (retorno de listas vazias).
 
-* ⚠️ **Edge Cases:**
-  * Envio de parâmetros de paginação negativos (`page=-10`).
-  * Envio de tipos de dados inválidos em query parameters (`limit=abcd`).
-  * Bloqueio de métodos HTTP não suportados (`PUT`, `POST`, `DELETE`) em endpoints de leitura.
+- ⚠️ **Edge Cases:**
+  - Envio de parâmetros de paginação negativos (`page=-10`).
+  - Envio de tipos de dados inválidos em query parameters (`limit=abcd`).
+  - Bloqueio de métodos HTTP não suportados (`PUT`) em endpoints de leitura.
 
 ---
 
@@ -44,49 +44,57 @@ A coleção do Postman foi estruturada nas seguintes categorias:
 
 A documentação técnica do projeto está organizada na pasta `docs/`:
 
-| Documento | Descrição | Link |
-| :--- | :--- | :--- |
-| 📋 **Plano de Teste** | Estratégia, escopo, ferramentas e gestão de riscos. | [Acessar](./docs/plano_de_teste.md) |
-| 🧪 **Casos de Teste** | Mapeamento detalhado dos cenários e asserções. | [Acessar](./docs/casos_de_teste.md) |
+| Documento                | Descrição                                            | Link                                             |
+| :----------------------- | :--------------------------------------------------- | :----------------------------------------------- |
+| 📋 **Plano de Teste**    | Estratégia, escopo, ferramentas e gestão de riscos.  | [Acessar](./docs/plano_de_teste.md)              |
+| 🧪 **Casos de Teste**    | Mapeamento detalhado dos cenários e asserções.       | [Acessar](./docs/casos_de_teste.md)              |
 | 🐛 **Relatório de Bugs** | Reporte de divergências de status code e validações. | [Acessar](./docs/relatorio_de_bugs_zelda_api.md) |
 
 ---
 
 ## 📊 Relatórios de Execução com Newman & HTML Extra
 
-Os testes foram automatizados e executados via linha de comando com o **Newman** no ambiente **WSL2 (Ubuntu)**, gerando relatórios gráficos e interativos através do `newman-reporter-htmlextra`. 
+Os testes foram automatizados e executados via linha de comando com o **Newman** no ambiente **WSL2 (Ubuntu)**, gerando relatórios gráficos e interativos através do `newman-reporter-htmlextra`.
 
-- Para visualizar **o relatório completo** basta acessar [aqui](./evidencias/Zelda%20API-report.html) e baixar o arquivo.
+- Para visualizar **o relatório completo** basta acessar [aqui](./evidencias/Zelda%20API-report.html) e baixar o arquivo neste ícone ![Pasted Image](./evidencias/github_download.png).
 
-<img width="1126" height="582" alt="Zelda API" src="https://github.com/user-attachments/assets/c39a0875-f383-48b7-b739-7198c0f1347a" />
+![Pasted Image](./evidencias/e_newman.png)
 
+#### Como executar na sua máquina local para obter um report atualizado
 
-#### 🚀 Como executar na sua máquina local
 Passos a serem executados para executar a coleção localmente e obter o relatório Newman:
 
 1. **Pré-requisitos:**
-   * Node.js (v18 ou superior)
-   * NPM ou NVM instalado
+   - Node.js (v18 ou superior)
+   - NPM ou NVM instalado
 
 2. **Instalar o Newman e o Reporter:**
+
    ```bash
    npm install -g newman newman-reporter-htmlextra
 
+   ```
+
 3. **Clonar o Repositório:**
-    ```bash
-    git clone [https://github.com/SEU_USUARIO/portifolio-qa-zelda-api.git](https://github.com/SEU_USUARIO/portifolio-qa-zelda-api.git)
-    cd portifolio-qa-zelda-api
-   
+   ```bash
+   git clone [https://github.com/SEU_USUARIO/portifolio-qa-zelda-api.git](https://github.com/SEU_USUARIO/portifolio-qa-zelda-api.git)
+   cd portifolio-qa-zelda-api
+
+   ```
 4. **Executar a Coleção e Gerar o Dashboard HTML:**
-    ```bash
-    newman run "Zelda API.postman_collection.json" -e "Zelda-API-Dev.postman_environment.json" -r cli,htmlextra
+
+   ```bash
+   newman run "Zelda API.postman_collection.json" -e "Zelda-API-Dev.postman_environment.json" -r cli,htmlextra
+
+   ```
 
 5. **Visualizar o Relatório:**
-   Acesse a pasta /newman gerada na raiz do projeto e abra o arquivo .html no seu navegador!
+   Acesse a pasta /newman gerada na raiz do projeto e abra o arquivo `.html` no seu navegador!
 
 ---
 
 ### 🛠️ Tecnologias e Ferramentas Utilizadas
+
 - Postman: Criação das requisições, variáveis de ambiente e scripts de validação em JavaScript.
 - Newman: Execution Runner de testes via CLI.
 - HTML Extra Reporter: Gerador de relatórios visuais de qualidade.
@@ -94,11 +102,21 @@ Passos a serem executados para executar a coleção localmente e obter o relató
 - VS Code: Editor de código e gestão do repositório.
 
 ---
+
+### 📋 Gerenciamento do Projeto
+
+Para o planejamento e rastreabilidade dos testes, o projeto foi estruturado no **Jira** utilizando metodologias ágeis: Epic, Task, Subtasks e Bugs
+
+![Pasted Image](./evidencias/jira_0.png)
+![Pasted Image](./evidencias/jira_1.png)
+
 <div align="center">
 
-  Desenvolvido com 💚 e foco em qualidade por **Le Castro** 👩‍💻✨
+---
 
-  [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/leticiacastro87)
-  [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/aicitelks)
+Desenvolvido com 💚 e foco em qualidade por **Le Castro** 👩‍💻✨
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/leticiacastro87)
+[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/aicitelks)
 
 </div>
