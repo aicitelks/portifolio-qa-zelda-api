@@ -23,9 +23,7 @@ Este documento reúne os achados de testes funcionais, exploratórios e de contr
   1.  Enviar requisição `GET` para `https://zelda.fanapis.com/api/games/600000000000000000000000`
   2.  Verificar o status code e payload de resposta.
 
-<span style="background-color: #e74c3c; color: white; padding: 1px 100px;">
-  Resultado Atual
-</span>
+### ❌ `Resultado Atual`
 
 - Ao realizar a busca de um recurso específico utilizando um ID sintaticamente válido (formato ObjectID de 24 caracteres), porém inexistente na base de dados, a API responde com HTTP `400 Bad Request`.
 
@@ -33,9 +31,7 @@ Este documento reúne os achados de testes funcionais, exploratórios e de contr
 
 ![Pasted image](/evidencias/e_ID.png)
 
-<span style="background-color: #2ecc71; color: white; padding: 1px 100px;">
-  Resultado Esperado
-</span>
+### ✅ `Resultado Esperado`
 
 - **Justificativa:** O status `400 Bad Request` indica que o cliente enviou uma requisição sintaticamente incorreta. Se a sintaxe do ID está adequada e a entidade apenas não consta no banco, a resposta semântica correta deve ser `404 Not Found`.
 
@@ -52,20 +48,18 @@ Este documento reúne os achados de testes funcionais, exploratórios e de contr
 
 ---
 
-### `[BUG-002] Métodos HTTP não suportados não retornam status 405 nem cabeçalho 'Allow'`
+### `[BUG-002] Métodos HTTP não suportados não retornam status 405`
 
-- **Componente:** Endpoints de leitura de recursos (ex: `POST /games`, `PUT /games/{id}`, `DELETE /games/{id}`)
+- **Componente:** Endpoint de escrita de recursos (`PUT /games/{id}`)
 
 - **Gravidade:** Baixa (Low / Padrão de Segurança e Protocolo)
 
 - **Passos para Reproduzir:**
-  1. Enviar requisição `PUT`para `https://zelda.fanapis.com/api/games` com um payload vazio ou qualquer JSON.
+  1. Enviar requisição `PUT` para `https://zelda.fanapis.com/api/games` com um payload vazio ou qualquer JSON.
 
   2. Verificar o cabeçalho e o status code retornado.
 
-<span style="background-color: #e74c3c; color: white; padding: 1px 100px;">
-  Resultado Atual
-</span>
+### ❌ `Resultado Atual`
 
 - Como a Zelda API é uma API exclusivamente de leitura (_read-only_), o envio de métodos de escrita (`POST`, `PUT`, `DELETE`) deve ser bloqueado com a indicação dos métodos permitidos. A API bloqueia a alteração, porém responde com `400 Bad Request`.
 
@@ -73,32 +67,26 @@ Este documento reúne os achados de testes funcionais, exploratórios e de contr
 
 ![Pasted image](/evidencias/e_PUT.png)
 
-<span style="background-color: #2ecc71; color: white; padding: 1px 100px;">
-  Resultado Esperado
-</span>
+### ✅ `Resultado Esperado`
 
 - **Status Code:** `405 Method Not Allowed`
 
-- **Headers:** Deve conter `Allow: GET` (informando ao cliente quais métodos HTTP são aceitos naquela rota).
+- **Headers:** Deve conter `Allow: GET` informando ao cliente quais métodos HTTP são aceitos naquela rota.
 
 ---
 
-### `[BUG-003] Aceite de números negativos em parâmetros de paginação (limit e page)`
+### `[BUG-003] Aceite de números negativos em parâmetros de paginação (page)`
 
 - **Componente:** Endpoints de listagem (`GET /games`)
 
 - **Gravidade:** Média (Medium / Regra de Negócio)
 
 - **Passos para Reproduzir:**
-  1. Enviar requisição `GET` para `https://zelda.fanapis.com/api/games?limit=-10`
+  1. Enviar requisição `GET` para `https://zelda.fanapis.com/api/games?page=-1`
 
-  2. Enviar requisição `GET` para `https://zelda.fanapis.com/api/games?page=-1`
+### ❌ `Resultado Atual`
 
-<span style="background-color: #e74c3c; color: white; padding: 1px 100px;">
-  Resultado Atual
-</span>
-
-- A API não possui validação de intervalo (range validation) para os parâmetros de paginação `limit` e `page`. Ao enviar um valor negativo, a API processa a requisição com sucesso (`200 OK`) aplicável por um tratamento interno silencioso.
+- A API não possui validação de intervalo (range validation) para os parâmetros de paginação `page`. Ao enviar um valor negativo, a API processa a requisição com sucesso (`200 OK`) aplicável por um tratamento interno silencioso.
 
 - **Status Code:** `200 OK`
 
@@ -106,25 +94,22 @@ Este documento reúne os achados de testes funcionais, exploratórios e de contr
 
 ![Pasted image](/evidencias/e_Neg.png)
 
-<span style="background-color: #2ecc71; color: white; padding: 1px 100px;">
-  Resultado Esperado
-</span>
+### ✅ `Resultado Esperado`
 
 - **Status Code:** `400 Bad Request`
 
 - **Response Body:** Mensagem de erro amigável
-  - ex:
 
-    ```json
-    {
-      "success": false,
-      "message": "limit must be a positive integer"
-    }
-    ```
+```json
+{
+  "success": false,
+  "message": "page must be a positive integer"
+}
+```
 
 ---
 
-### `[BUG-004] Fallback silencioso ao enviar tipos de dados incompatíveis no filtro limit`
+### `[BUG-004] Fallback silencioso ao enviar tipos de dados incompatíveis no filtro (limit)`
 
 - **Componente:** Endpoints de listagem (`GET /items`)
 
@@ -135,9 +120,7 @@ Este documento reúne os achados de testes funcionais, exploratórios e de contr
 
   2. Observar o número de itens retornados na lista e o status de resposta.
 
-<span style="background-color: #e74c3c; color: white; padding: 1px 100px;">
-  Resultado Atual
-</span>
+### ❌ `Resultado Atual`
 
 - Ao enviar uma string alfabética para um parâmetro numérico de paginação (ex: `limit=abcd`), o parser do servidor ignora o valor inválido e assume silenciosamente o valor _default_ da aplicação (20 itens), respondendo com `200 OK`.
 
@@ -147,20 +130,17 @@ Este documento reúne os achados de testes funcionais, exploratórios e de contr
 
 ![Pasted image](/evidencias/e_abc.png)
 
-<span style="background-color: #2ecc71; color: white; padding: 1px 100px;">
-  Resultado Esperado
-</span>
+### ✅ `Resultado Esperado`
 
 - **Status Code:** `400 Bad Request`
 
 - **Response Body:** Mensagem informando erro de tipagem no parâmetro
-  - ex:
 
-    ```json
+```json
     {
       "success": false,
       "message": "limit parameter must be a number""
     }
-    ```
+```
 
 - **Impacto:** O mascaramento de falhas de tipagem impede que clientes integradores identifiquem erros de parâmetros enviados em suas requisições.
