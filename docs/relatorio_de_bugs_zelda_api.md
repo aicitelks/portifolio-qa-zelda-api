@@ -144,3 +144,10 @@ Este documento reúne os achados de testes funcionais, exploratórios e de contr
 ```
 
 - **Impacto:** O mascaramento de falhas de tipagem impede que clientes integradores identifiquem erros de parâmetros enviados em suas requisições.
+
+### Evidencia em vídeo dos erros mencionados
+https://github.com/user-attachments/assets/de71733e-c302-4c38-a3e5-fab512a3e890
+
+
+
+
